@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тренажер таблицы умножения</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://img.freepik.com/free-vector/empty-classroom-interior-with-chalkboard_1308-65378.jpg?w=1380&t=st=1704299694~exp=1704300294~hmac=1455f3fc8c906722d5c32d6058380a21469728569ab20175d2479f84337660d4');
+            background-size: cover;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
+
+        #title {
+            font-size: 24px;
+            position: relative;
+            top: -140px;
+        }
+
+        #question {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        #userAnswer {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        #result {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        #result.correct {
+            color: green;
+            animation: fadeOut 2s ease-in-out;
+        }
+
+        #stats {
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div>
+    <h2 id="title">Тренажер таблицы умножения</h2>
+    <input type="number" id="userAnswer" placeholder="Введите ответ">
+    <div id="question"></div>
+    <button onclick="checkAnswer()">Проверить</button>
+    <div id="result"></div>
+    <div id="correctPercentage"></div>
+    <button onclick="restart()">Начать заново</button>
+    <div id="stats"></div>
+</div>
+
+<script>
+    var totalQuestions = 0;
+    var correctAnswers = 0;
+    var questionsSinceLastUpdate = 0;
+
+    function generateQuestion() {
+        var multiplier1 = Math.floor(Math.random() * 10) + 1;
+        var multiplier2 = Math.floor(Math.random() * 10) + 1;
+        return {question: `Сколько будет ${multiplier1} умножить на ${multiplier2}?`, answer: multiplier1 * multiplier2};
+    }
+
+    function restart() {
+        totalQuestions = 0;
+        correctAnswers = 0;
+        questionsSinceLastUpdate = 0;
+        document.getElementById("stats").innerHTML = "";
+        document.getElementById("correctPercentage").innerHTML = "";
+        alert("Тренажер перезапущен!");
+        newQuestion();
+    }
+
+    function newQuestion() {
+        currentQuestion = generateQuestion();
+        document.getElementById("question").innerHTML = currentQuestion.question;
+        document.getElementById("userAnswer").value = "";
+    }
+
+    newQuestion();
+
+    function checkAnswer() {
+        var userAnswer = document.getElementById("userAnswer").value;
+        if (userAnswer === "") {
+            alert("Введите ответ!");
+            return;
+        }
+
+        userAnswer = parseInt(userAnswer);
+        var resultDiv = document.getElementById("result");
+        resultDiv.innerHTML = "";
+
+        if (userAnswer === currentQuestion.answer) {
+            resultDiv.className = "correct";
+            resultDiv.innerHTML = "Правильно!";
+            correctAnswers++;
+        } else {
+            resultDiv.className = "";
+            resultDiv.innerHTML = `Неправильно. Правильный ответ: ${currentQuestion.answer}`;
+        }
+
+        totalQuestions++; // Увеличиваем общее количество вопросов
+        questionsSinceLastUpdate++;
+
+        if (questionsSinceLastUpdate >= 10) {
+            updateStats();
+            alert(`Процент правильных ответов: ${(correctAnswers / totalQuestions) * 100}%`);
+            questionsSinceLastUpdate = 0;
+        } else {
+            newQuestion();
+        }
+    }
+
+    function updateStats() {
+        var percentage = totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
+        document.getElementById("correctPercentage").innerHTML = `Процент правильных ответов: ${percentage.toFixed(2)}%`;
+    }
+</script>
+
+</body>
+</html>
