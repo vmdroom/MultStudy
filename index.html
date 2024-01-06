@@ -7,13 +7,16 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-image: url('https://img.freepik.com/free-vector/empty-classroom-interior-with-chalkboard_1308-65378.jpg?w=1380&t=st=1704299694~exp=1704300294~hmac=1455f3fc8c906722d5c32d6058380a21469728569ab20175d2479f84337660d4');
-            background-size: cover;
+            background-image: url('https://i.pinimg.com/originals/1c/e6/77/1ce677e0dbdbcaf8ea5772502ecc9f53.jpg');
+            background-size: cover; /* Растягивает фон на всю высоту и ширину */
+            background-position: center; /* Располагает фон по центру */
+            background-repeat: no-repeat; /* Запрещает повторение фона */
             margin: 0;
             height: 100vh;
             display: flex;
+            flex-direction: column; /* Размещение элементов в столбец */
+            align-items: center; /* Выравнивание по центру */
             justify-content: center;
-            align-items: center;
             text-align: center;
             color: white;
         }
@@ -21,12 +24,13 @@
         #title {
             font-size: 24px;
             position: relative;
-            top: -140px;
+            top: -200px;
         }
 
         #question {
             font-size: 20px;
             margin-bottom: 10px;
+            color: #ecf0f1; /* Цвет вопроса */
         }
 
         #userAnswer {
@@ -35,18 +39,47 @@
         }
 
         #result {
-            font-size: 18px;
+            font-size: 22px;
             margin-bottom: 10px;
         }
 
         #result.correct {
-            color: green;
-            animation: fadeOut 2s ease-in-out;
+            color: rgb(124, 197, 41);
+        }
+
+        #result.incorrect {
+            color: rgb(255, 0, 0);
         }
 
         #stats {
             font-size: 14px;
             margin-top: 10px;
+        }
+
+        #checkButton,
+        #restartButton {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #checkButton:hover,
+        #restartButton:hover {
+            background-color: #2980b9;
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
         }
     </style>
 </head>
@@ -54,12 +87,12 @@
 
 <div>
     <h2 id="title">Тренажер таблицы умножения</h2>
-    <input type="number" id="userAnswer" placeholder="Введите ответ">
     <div id="question"></div>
-    <button onclick="checkAnswer()">Проверить</button>
+    <input type="number" id="userAnswer" placeholder="Введите ответ" onkeydown="if (event.key === 'Enter') checkAnswer()">
+    <button id="checkButton" onclick="checkAnswer()">Проверить</button>
     <div id="result"></div>
     <div id="correctPercentage"></div>
-    <button onclick="restart()">Начать заново</button>
+    <button id="restartButton" onclick="restart()">Начать заново</button>
     <div id="stats"></div>
 </div>
 
@@ -108,7 +141,7 @@
             resultDiv.innerHTML = "Правильно!";
             correctAnswers++;
         } else {
-            resultDiv.className = "";
+            resultDiv.className = "incorrect";
             resultDiv.innerHTML = `Неправильно. Правильный ответ: ${currentQuestion.answer}`;
         }
 
