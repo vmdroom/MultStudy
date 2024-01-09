@@ -44,7 +44,7 @@
         }
 
         #result.correct {
-            color: rgb(124, 197, 41);
+            color: rgb(114, 199, 18);
         }
 
         #result.incorrect {
@@ -102,8 +102,8 @@
     var questionsSinceLastUpdate = 0;
 
     function generateQuestion() {
-        var multiplier1 = Math.floor(Math.random() * 10) + 1;
-        var multiplier2 = Math.floor(Math.random() * 10) + 1;
+        var multiplier1 = Math.floor(Math.random() * 8) + 2;
+        var multiplier2 = Math.floor(Math.random() * 8) + 2;
         return {question: `Сколько будет ${multiplier1} умножить на ${multiplier2}?`, answer: multiplier1 * multiplier2};
     }
 
@@ -113,7 +113,10 @@
         questionsSinceLastUpdate = 0;
         document.getElementById("stats").innerHTML = "";
         document.getElementById("correctPercentage").innerHTML = "";
-        alert("Тренажер перезапущен!");
+        
+        // Очистить результат
+        document.getElementById("result").innerHTML = "";
+        
         newQuestion();
     }
 
